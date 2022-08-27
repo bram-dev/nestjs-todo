@@ -6,17 +6,15 @@
 }
 
 .menu {
+    padding: 0 200px 0 200px;
     background-color: #1F2937;
-    color: #E5E7EB;
-    font-size: 18px;
     display: flex;
-    justify-content: space-around;
     align-items: center;
-    height: 4rem;
+    height: 48px;
 }
 
 .logo {
-    width: 2rem;
+    width: 24px;
     margin-right: 12px;
 }
 
@@ -27,12 +25,18 @@
 }
 
 .header-logo-text {
+    display: flex;
+    justify-content: flex-start;
     width: 50%;
+    color: #F9FAF8;
+    font-size: 24px;
 }
 
 .header-items {
+    color: #E5E7EB;
+    font-size: 18px;
     display: flex;
-    justify-content: space-around;
+    justify-content: flex-end;
     width: 50%;
 }
 
@@ -48,9 +52,60 @@
 .header-item {
     display: flex;
     justify-content: center;
-    height: 64px;
+    height: 48px;
 }
 
 .header-item > span {
     align-self: center;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid red;
+}
+
+.main, .information, .quote {
+    padding: 0 200px 0 200px;
+    border: 1px solid red;
+}
+
+.main {
+    background-color: #1F2937;
+    display: flex;
+}
+
+.main > div {
+    align-self: center;
+}
+
+.main-text {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    padding-right: 50px;
+}
+
+.main-text-header {
+    font-size: 36px;
+    color: #F9FAF8;
+}
+
+.main-text-paragraph {
+    font-size: 18px;
+    color: #E5E7EB;
+}
+
+.main-img {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    padding-left: 50px;
+}
+
+.footer {
+    padding: 0 200px 0 200px;
+    background-color: #1F2937;
+    height: 48px;
+    color: #E5E7EB;
 }
