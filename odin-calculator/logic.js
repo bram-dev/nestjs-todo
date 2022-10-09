@@ -54,8 +54,15 @@ buttonClear.addEventListener("click", function() {
     paraDisplayOutput.textContent = currentInputNum;
 });
 
+function addListenerMulti(element, eventNames, listener) {
+    var events = eventNames.split(' ');
+    for (var i=0, iLen=events.length; i<iLen; i++) {
+      element.addEventListener(events[i], listener, false);
+    }
+  }
+
 Array.from(allButtons).forEach(button => {
-    button.addEventListener("mousedown touchstart", function() {
+    addListenerMulti(button, "mousedown touchstart", function() {
         let buttonRule = [...stylesheet.cssRules].find((r) => r.selectorText === `#${button.id}`);
         switch(button.className) {
             case 'control-buttons':
@@ -77,7 +84,7 @@ Array.from(allButtons).forEach(button => {
 });
 
 Array.from(allButtons).forEach(button => {
-    button.addEventListener("mouseup touchend", function() {
+    addListenerMulti(button, "mouseup touchend", function() {
         let buttonRule = [...stylesheet.cssRules].find((r) => r.selectorText === `#${button.id}`);
         switch(button.className) {
             case 'control-buttons':
