@@ -1,0 +1,163 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: roboto;
+    color: rgb(216, 216, 216);
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+header {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    color: black;
+}
+
+#container {
+    position: absolute;
+    top: 80px;
+    z-index: 9;
+    overflow: auto;
+    box-shadow: 0 18px 36px 0 rgb(0 0 0 / 50%);
+    width: 240px;
+    height: 325px;
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns: 60px 60px 60px 60px;
+    grid-template-rows: 80px 49px 49px 49px;
+    grid-template-areas: 
+      "display display display display"
+      "button-1 button-2 button-3 button-4"
+      "button-5 button-6 button-7 button-8"
+      "button-9 button-10 button-11 button-12"
+      "button-13 button-14 button-15 button-16"
+      "button-17 button-17 button-18 button-19";
+}
+
+#controls-clear {
+    grid-area: button-1;
+}
+
+#controls-adittion-minus {
+    grid-area: button-2;
+}
+
+#controls-percentage {
+    grid-area: button-3;
+}
+
+#controls-divide {
+    grid-area: button-4;
+}
+
+#controls-7 {
+    grid-area: button-5;
+}
+
+#controls-8 {
+    grid-area: button-6;
+}
+
+#controls-9 {
+    grid-area: button-7;
+}
+
+#controls-multiply {
+    grid-area: button-8;
+}
+
+#controls-4 {
+    grid-area: button-9;
+}
+
+#controls-5 {
+    grid-area: button-10;
+}
+
+#controls-6 {
+    grid-area: button-11;
+}
+
+#controls-subtract {
+    grid-area: button-12;
+}
+
+#controls-1 {
+    grid-area: button-13;
+}
+
+#controls-2 {
+    grid-area: button-14;
+}
+
+#controls-3 {
+    grid-area: button-15;
+}
+
+#controls-adittion {
+    grid-area: button-16;
+}
+
+#controls-0 {
+    grid-area: button-17;
+}
+
+#controls-comma {
+    grid-area: button-18;
+    background-color: rgb(123, 123, 123);
+}
+
+#controls-equals {
+    grid-area: button-19;
+    background-color: rgb(255, 158, 11);
+    height: 49px;
+}
+
+.number-buttons {
+    background-color: rgb(123, 123, 123);
+}
+
+.control-buttons {
+    background-color: rgb(97, 97, 97);
+}
+
+.operator-buttons {
+    background-color: rgb(255, 158, 11);
+    height: 49px;
+}
+
+#display {
+    padding-bottom: 2px;
+    cursor: move;
+    z-index: 10;
+    grid-area: display;
+    display: flex;
+    align-items: flex-end;
+    padding-left: 20px;
+    padding-right: 20px;
+    justify-content: right;
+    background-color: rgb(80, 80, 80);
+}
+
+#output-display {
+    text-align: right;
+    width: 200px;
+    height: auto;
+    font-size: 3em;
+    font-weight: 200;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+button {
+    border: solid rgb(80, 80, 80);
+    border-width: 0.001em;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 1.3em;
+}
