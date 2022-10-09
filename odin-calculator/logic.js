@@ -23,7 +23,7 @@ buttonAdittionMinus.addEventListener("click", function() {
     if(lastSelectedEquals) {
         currentSum = -currentSum;
         paraDisplayOutput.textContent = currentSum;
-    } else{
+    } else {
         currentInputNum = -currentInputNum;
         paraDisplayOutput.textContent = currentInputNum;
         adjustFontSize(displayParaRule, paraDisplayOutput);
@@ -44,6 +44,8 @@ buttonPercentage.addEventListener("click", function() {
 buttonClear.addEventListener("click", function() {
     clearBorderOperatorButtons();
     displayParaRule.style.fontSize = "3em";
+    lastSelectedEquals = false;
+    lastSelectedOperator = false;
     recentOperator = "";
     currentOperator = "";
     newInputNum = "";
