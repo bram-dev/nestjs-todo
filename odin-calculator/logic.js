@@ -19,116 +19,244 @@ let currentInputNum = 0;
 let currentButtonNum = "";
 paraDisplayOutput.textContent = currentInputNum;
 
-buttonAdittionMinus.addEventListener("click", function() {
+window.addEventListener('keydown', function(event) {
+    const key = event.key;
+    if (key === "Backspace") {
+        if(currentInputNum === 0) { } else {
+            paraDisplayOutput.textContent = paraDisplayOutput.textContent.slice(0, -1);
+            if(paraDisplayOutput.textContent == "") { 
+                paraDisplayOutput.textContent = 0;
+                currentInputNum = 0;
+            };
+        };
+    };
+});
+
+function adittionMinusClicked() {
     if(lastSelectedEquals) {
         currentSum = -currentSum;
         paraDisplayOutput.textContent = currentSum;
     } else {
         currentInputNum = -currentInputNum;
         paraDisplayOutput.textContent = currentInputNum;
-        adjustFontSize(displayParaRule, paraDisplayOutput);
     };
+    adjustFontSize(displayParaRule, paraDisplayOutput);
+};
+
+buttonAdittionMinus.addEventListener("click", function() {
+    adittionMinusClicked();
 });
 
-buttonPercentage.addEventListener("click", function() {
+function percentageButtonClicked() {
     if(lastSelectedEquals) {
         currentSum = currentSum / 100;
         paraDisplayOutput.textContent = currentSum;
     } else {
         currentInputNum = currentInputNum / 100;
         paraDisplayOutput.textContent = currentInputNum;
-        adjustFontSize(displayParaRule, paraDisplayOutput);
     };
+    adjustFontSize(displayParaRule, paraDisplayOutput);
+};
+
+buttonPercentage.addEventListener("click", function() {
+    percentageButtonClicked();
 });
 
-buttonClear.addEventListener("click", function() {
+function clearButtonClicked() {
     clearBorderOperatorButtons();
     displayParaRule.style.fontSize = "3em";
     lastSelectedEquals = false;
     lastSelectedOperator = false;
-    recentOperator = "";
     currentOperator = "";
     newInputNum = "";
     currentInputNum = 0;
     currentSum = 0;
     paraDisplayOutput.textContent = currentInputNum;
+}
+
+buttonClear.addEventListener("click", function() {
+    clearButtonClicked();
 });
 
-function addListenerMulti(element, eventNames, listener) {
-    var events = eventNames.split(' ');
-    for (var i=0, iLen=events.length; i<iLen; i++) {
-      element.addEventListener(events[i], listener, false);
-    }
-  }
+function switchButtonColorDown(button) {
+    let buttonRule = [...stylesheet.cssRules].find((r) => r.selectorText === `#${button.id}`);
+    switch(button.className) {
+        case 'control-buttons':
+            buttonRule.style.backgroundColor = 'rgb(123, 123, 123)';
+            break;
+        case 'number-buttons':
+            buttonRule.style.backgroundColor = 'rgb(176, 176, 176)';
+            break;
+        case 'comma-button':
+            buttonRule.style.backgroundColor = 'rgb(176, 176, 176)';
+            break;
+        case 'zero-button':
+            buttonRule.style.backgroundColor = 'rgb(176, 176, 176)';
+            break;
+        case 'operator-buttons':
+            buttonRule.style.backgroundColor = 'rgb(192, 129, 45)';
+            break;
+        case 'equals-button':
+            buttonRule.style.backgroundColor = 'rgb(192, 129, 45)';
+    };
+};
+
+function switchButtonColorUp(button) {
+    let buttonRule = [...stylesheet.cssRules].find((r) => r.selectorText === `#${button.id}`);
+    switch(button.className) {
+        case 'control-buttons':
+            buttonRule.style.backgroundColor = 'rgb(97, 97, 97)';
+            break;
+        case 'number-buttons':
+            buttonRule.style.backgroundColor = 'rgb(123, 123, 123)';
+            break;
+        case 'comma-button':
+            buttonRule.style.backgroundColor = 'rgb(123, 123, 123)';
+            break;
+        case 'zero-button':
+            buttonRule.style.backgroundColor = 'rgb(123, 123, 123)';
+            break;
+        case 'operator-buttons':
+            buttonRule.style.backgroundColor = 'rgb(255, 158, 11)';
+            break;
+        case 'equals-button':
+            buttonRule.style.backgroundColor = 'rgb(255, 158, 11)';
+    };
+};
+
+const buttonsToKeysMap = [
+    { key: "0", className: "zero-button", id: "controls-0" },
+    { key: "1", className: "number-buttons", id: "controls-1" },
+    { key: "2", className: "number-buttons", id: "controls-2" },
+    { key: "3", className: "number-buttons", id: "controls-3" },
+    { key: "4", className: "number-buttons", id: "controls-4" },
+    { key: "5", className: "number-buttons", id: "controls-5" },
+    { key: "6", className: "number-buttons", id: "controls-6" },
+    { key: "7", className: "number-buttons", id: "controls-7" },
+    { key: "8", className: "number-buttons", id: "controls-8" },
+    { key: "9", className: "number-buttons", id: "controls-9" },
+    { key: ".", className: "comma-button", id: "controls-comma" },
+    { key: "=", className: "equals-button", id: "controls-equals" },
+    { key: "+", className: "operator-buttons", id: "controls-adittion" },
+    { key: "%", className: "control-buttons", id: "controls-percentage" },
+    { key: "±", className: "control-buttons", id: "controls-adittion-minus" },
+    { key: "c", className: "control-buttons", id: "controls-clear" },
+    { key: "/", className: "operator-buttons", id: "controls-divide" },
+    { key: "*", className: "operator-buttons", id: "controls-multiply" },
+    { key: "-", className: "operator-buttons", id: "controls-subtract" }
+];
+
+Array.from(allButtons).forEach(button => {
+    addEventListener('keydown', (event) => { 
+        if(buttonsToKeysMap.find(findKey)) {
+            if(buttonsToKeysMap.find(findKey).id == button.id) {
+                switchButtonColorDown(button);
+                if(button.className === "number-buttons") {
+                    numberButtonClicked(button);
+                } else {
+                    switch(button.id) {
+                        case "controls-clear":
+                            clearButtonClicked();
+                            break;
+                        case "controls-comma":
+                            commaButtonClicked();
+                            break;
+                        case "controls-equals":
+                            equalsButtonClicked();
+                            break;
+                        case "controls-multiply":
+                            multiplyButtonClicked();
+                            break;
+                        case "controls-adittion":
+                            adittionButtonClicked();
+                            break;
+                        case "controls-subtract":
+                            subtractButtonClicked();
+                            break;
+                        case "controls-divide":
+                            divideButtonClicked();
+                            break;
+                        case "controls-0":
+                            zeroButtonClicked();
+                            break;
+                    };
+                }
+            };
+        };
+        function findKey(key) {
+            return key.key === event.key;
+        };
+    });
+});
+
+Array.from(allButtons).forEach(button => {
+    addEventListener('keyup', (event) => { 
+        if(buttonsToKeysMap.find(findKey)) {
+            if(buttonsToKeysMap.find(findKey).id === button.id) {
+                switchButtonColorUp(button);
+            };
+        };
+        function findKey(key) {
+            return key.key === event.key;
+        };
+    });
+});
 
 Array.from(allButtons).forEach(button => {
     addListenerMulti(button, "mousedown touchstart", function() {
-        let buttonRule = [...stylesheet.cssRules].find((r) => r.selectorText === `#${button.id}`);
-        switch(button.className) {
-            case 'control-buttons':
-                buttonRule.style.backgroundColor = 'rgb(123, 123, 123)';
-                break;
-            case 'number-buttons':
-                buttonRule.style.backgroundColor = 'rgb(176, 176, 176)';
-                break;
-            case 'comma-button':
-                buttonRule.style.backgroundColor = 'rgb(176, 176, 176)';
-                break;
-            case 'operator-buttons':
-                buttonRule.style.backgroundColor = 'rgb(192, 129, 45)';
-                break;
-            case 'equals-button':
-                buttonRule.style.backgroundColor = 'rgb(192, 129, 45)';
-        }
+        switchButtonColorDown(button);
     });
 });
 
 Array.from(allButtons).forEach(button => {
     addListenerMulti(button, "mouseup touchend", function() {
-        let buttonRule = [...stylesheet.cssRules].find((r) => r.selectorText === `#${button.id}`);
-        switch(button.className) {
-            case 'control-buttons':
-                buttonRule.style.backgroundColor = 'rgb(97, 97, 97)';
-                break;
-            case 'number-buttons':
-                buttonRule.style.backgroundColor = 'rgb(123, 123, 123)';
-                break;
-            case 'comma-button':
-                buttonRule.style.backgroundColor = 'rgb(123, 123, 123)';
-                break;
-            case 'operator-buttons':
-                buttonRule.style.backgroundColor = 'rgb(255, 158, 11)';
-                break;
-            case 'equals-button':
-                buttonRule.style.backgroundColor = 'rgb(255, 158, 11)';
-        }
+        switchButtonColorUp(button);
     });
 });
 
-buttonComma.addEventListener("click", function() {
+function addListenerMulti(element, eventNames, listener) {
+    var events = eventNames.split(' ');
+    for (var i=0, iLen=events.length; i<iLen; i++) {
+        element.addEventListener(events[i], listener, false);
+    };
+};
+
+function commaButtonClicked() {
     innerButtonComma = buttonComma.innerHTML;
     if(!paraDisplayOutput.textContent.includes(".")) {
         paraDisplayOutput.textContent = currentInputNum + innerButtonComma;
     };
     adjustFontSize(displayParaRule, paraDisplayOutput);
+};
+
+buttonComma.addEventListener("click", function() {
+    commaButtonClicked();
 });
+
+function numberButtonClicked(buttonNumber) {
+    currentButtonNum = buttonNumber.innerHTML;
+    operatorUsed(currentOperator, currentButtonNum);
+    if(buttonNumber.innerHTML == 0) {} else {
+        if(currentInputNum == 0) { currentInputNum = ""; };
+        if(paraDisplayOutput.textContent.includes(".") && currentOperator == "") { 
+            if(currentInputNum == 0) { currentInputNum = ""; };
+            showCurrentInputWithComma(currentButtonNum); 
+        } else {
+            if(currentOperator == "") {
+                if(currentInputNum == 0) { currentInputNum = ""; };
+                showCurrentInputNum(currentButtonNum);
+            }
+        }
+    }
+    if(paraDisplayOutput.textContent.length >= 30) {
+        paraDisplayOutput.textContent = paraDisplayOutput.textContent.slice(0,30);
+    };
+    adjustFontSize(displayParaRule, paraDisplayOutput);
+};
 
 Array.from(buttonsNumber).forEach(buttonNumber => {
     buttonNumber.addEventListener("click", function() {
-        currentButtonNum = buttonNumber.innerHTML;
-        operatorUsed(currentOperator, currentButtonNum);
-        if(buttonNumber.innerHTML == 0) {} else {
-            if(currentInputNum == 0) { currentInputNum = ""; };
-            if(paraDisplayOutput.textContent.includes(".") && currentOperator == "") { 
-                if(currentInputNum == 0) { currentInputNum = ""; };
-                showCurrentInputWithComma(currentButtonNum); 
-            } else {
-                if(currentOperator == "") {
-                    if(currentInputNum == 0) { currentInputNum = ""; };
-                    showCurrentInputNum(currentButtonNum);
-                }
-            }
-        }
+        numberButtonClicked(buttonNumber);
     });
 });
 
@@ -161,8 +289,9 @@ function operatorUsed(currentOperator, currentButtonNum) {
             if(currentInputNum == 0) { currentInputNum = ""; };
             showCurrentInputNum(currentButtonNum);
         }
+        adjustFontSize(displayParaRule, paraDisplayOutput);
     };
-}
+};
 
 function showCurrentInputNum(currentButtonNum) {
     currentInputNum += currentButtonNum;
@@ -172,21 +301,28 @@ function showCurrentInputNum(currentButtonNum) {
 
 function showCurrentInputWithComma(currentButtonNum) {
     paraDisplayOutput.textContent += currentButtonNum;
-    currentInputNum = parseFloat(paraDisplayOutput.textContent);
+    currentInputNum = paraDisplayOutput.textContent;
     paraDisplayOutput.textContent = currentInputNum;
     adjustFontSize(displayParaRule, paraDisplayOutput);
 };
 
-buttonZero.addEventListener("click", function() {
-    if(currentInputNum == 0) {} else {
-        if(lastSelectedOperator) {
-            currentInputNum += "0";
-            paraDisplayOutput.textContent = currentInputNum;
+function zeroButtonClicked() {
+    currentButtonNum = "0";
+    if((lastSelectedOperator && currentSum != 0 && !currentInputNum.toString().slice(0,2) === "0.") || (lastSelectedOperator && currentSum !=0 && currentInputNum == "0")) { paraDisplayOutput.textContent = "0"; };
+    if(paraDisplayOutput.textContent.slice(0,2) === "0.") { paraDisplayOutput.textContent += currentButtonNum; };
+    if(currentInputNum === 0 && currentSum === 0) { } else {
+        if(paraDisplayOutput.textContent.includes(".")) {
+            showCurrentInputWithComma(currentButtonNum);
         } else {
             currentInputNum = 0;
             paraDisplayOutput.textContent = currentInputNum;
         };
     }
+    adjustFontSize(displayParaRule, paraDisplayOutput);
+};
+
+buttonZero.addEventListener("click", function() {
+    zeroButtonClicked();
 });
 
 let currentOperator = "";
@@ -200,94 +336,102 @@ function clearBorderOperatorButtons() {
     divideParaRule.style.borderWidth = "0.001em";
     adittionParaRule.style.borderWidth = "0.001em";
     multiplyParaRule.style.borderWidth = "0.001em";
-}
+};
 
-buttonAdittion.addEventListener("click", function() {
-    if(currentOperator == "+") { recentOperator = currentOperator };
+function adittionButtonClicked() {
     lastSelectedEquals = false;
     lastSelectedOperator = true;
     makeAllGlobalNumsInt();
-    if(recentOperator == "+") { sumAll() };
+    if(currentOperator != "" && currentInputNum != 0) { sumAll() };
     if(currentSum == 0) { currentSum = currentInputNum; };
     currentInputNum = 0;
+    adjustFontSize(displayParaRule, paraDisplayOutput);
     clearBorderOperatorButtons();
     adittionParaRule.style.borderWidth = "0.1em";
     currentOperator = "+";
+};
+
+buttonAdittion.addEventListener("click", function() {
+    adittionButtonClicked();
 });
 
-buttonDivide.addEventListener("click", function() {
-    if(currentOperator == "/") { recentOperator = currentOperator };
+function divideButtonClicked() {
     lastSelectedEquals = false;
     lastSelectedOperator = true;
     makeAllGlobalNumsInt();
-    if(recentOperator == "/") { sumAll() };
+    if(currentOperator != "" && currentInputNum != 0) { sumAll() };
     if(currentSum == 0) { currentSum = currentInputNum; };
     currentInputNum = 0;
+    adjustFontSize(displayParaRule, paraDisplayOutput);
     clearBorderOperatorButtons();
     divideParaRule.style.borderWidth = "0.1em";
     currentOperator = "/";
+};
+
+buttonDivide.addEventListener("click", function() {
+    divideButtonClicked();
 });
 
-buttonMultiply.addEventListener("click", function() {
-    if(currentOperator == "*") { recentOperator = currentOperator };
+function multiplyButtonClicked() {
     lastSelectedEquals = false;
     lastSelectedOperator = true;
     makeAllGlobalNumsInt();
-    if(recentOperator == "*") { sumAll() };
+    if(currentOperator != "" && currentInputNum != 0) { sumAll() };
     if(currentSum == 0) { currentSum = currentInputNum; };
     currentInputNum = 0;
+    adjustFontSize(displayParaRule, paraDisplayOutput);
     clearBorderOperatorButtons();
     multiplyParaRule.style.borderWidth = "0.1em";
     currentOperator = "*";
+};
+
+buttonMultiply.addEventListener("click", function() {
+    multiplyButtonClicked();
 });
 
-buttonSubtract.addEventListener("click", function() {
-    if(currentOperator == "-") { recentOperator = currentOperator };
+function subtractButtonClicked() {
     lastSelectedEquals = false;
     lastSelectedOperator = true;
     makeAllGlobalNumsInt();
-    if(recentOperator == "-") { sumAll() };
+    if(currentOperator != "" && currentInputNum != 0) { sumAll() };
     if(currentSum == 0) { currentSum = currentInputNum; };
     currentInputNum = 0;
+    adjustFontSize(displayParaRule, paraDisplayOutput);
     clearBorderOperatorButtons();
     subtractParaRule.style.borderWidth = "0.1em";
     currentOperator = "-";
+};
+
+buttonSubtract.addEventListener("click", function() {
+    subtractButtonClicked();
 });
 
 function sumAll() {
-    switch(recentOperator) {
-        case "+":
-            add();
-            adjustFontSize(displayParaRule, paraDisplayOutput);
-            break;
-        case "/":
-            divide();
-            adjustFontSize(displayParaRule, paraDisplayOutput);
-            break;
-        case "*":
-            multiply();
-            adjustFontSize(displayParaRule, paraDisplayOutput);
-            break;
-        case "-":
-            subtract();
-            adjustFontSize(displayParaRule, paraDisplayOutput);
-            break;
-        case "":
-            break;    
-    }
-    recentOperator = "";
-}
-
-let recentOperator;
-let lastSelectedEquals;
-
-buttonEquals.addEventListener("click", function() {
-    lastSelectedEquals = true;
-    lastSelectedOperator = false;
-    clearBorderOperatorButtons();
     switch(currentOperator) {
         case "+":
             add();
+            break;
+        case "/":
+            divide();
+            break;
+        case "*":
+            multiply();
+            break;
+        case "-":
+            subtract();
+            break;
+        case "":
+            break;    
+    };
+    currentOperator = "";
+};
+
+let lastSelectedEquals;
+
+function switchOpertator(operator) {
+    switch(operator) {
+        case "+":
+            add();
             adjustFontSize(displayParaRule, paraDisplayOutput);
             break;
         case "/":
@@ -302,14 +446,32 @@ buttonEquals.addEventListener("click", function() {
             subtract();
             adjustFontSize(displayParaRule, paraDisplayOutput);
             break;    
-    }
+    }; 
+};
+
+function equalsButtonClicked() {
+    lastSelectedEquals = true;
+    lastSelectedOperator = false;
+    clearBorderOperatorButtons();
+    if(currentOperator != "") {
+        switchOpertator(currentOperator);
+    } else {
+        switchOpertator(equalsOperator);
+    };
+    if(currentOperator != "") { equalsOperator = currentOperator; };
+    currentOperator = "";
+    adjustFontSize(displayParaRule, paraDisplayOutput);
+};
+
+buttonEquals.addEventListener("click", function() {
+    equalsButtonClicked();
 });
 
 const add = function() {
     makeAllGlobalNumsInt();
     currentSum = currentInputNum + currentSum;
     return paraDisplayOutput.textContent = currentSum;
-}
+};
 
 const multiply = function() {
     makeAllGlobalNumsInt();
@@ -321,40 +483,42 @@ const divide = function() {
     makeAllGlobalNumsInt();
     currentSum = currentSum / currentInputNum;
     return paraDisplayOutput.textContent = currentSum;
-}
+};
 
 const subtract = function() {
     makeAllGlobalNumsInt();
     currentSum = currentSum - currentInputNum;
     return paraDisplayOutput.textContent = currentSum;
-}
+};
 
 function makeAllGlobalNumsInt() {
     currentInputNum = parseFloat(currentInputNum);
     currentSum = parseFloat(currentSum);
-}
+};
 
 const displayParaRule = [...stylesheet.cssRules].find((r) => r.selectorText === "#output-display");
 
 function checkOverflow(el) {
    let curOverflow = el.style.overflow;
-   if (!curOverflow || curOverflow === "visible") {
+   if(!curOverflow || curOverflow === "visible") {
         el.style.overflow = "hidden";
-    }
+    ;}
    let isOverflowing = el.clientWidth < el.scrollWidth || el.clientHeight < el.scrollHeight;
    el.style.overflow = curOverflow;
    return isOverflowing;
 }
 
-const incrementionRate = 0.05 // To augment 0.05em in every iteration
+const incrementionRate = 0.025
 
 function adjustFontSize(cssRule, el) {
+    cssRule.style.fontSize = "3em";
     let fitted = false;
     let lastSize;
-    if(cssRule.style.fontSize == "0.5em") {
-        return fitted = true;
-    }
+
     while (!fitted) {
+        if(cssRule.style.fontSize <= "0.6em") {
+            fitted = true;
+        };
         if (checkOverflow(el)) {
             lastSize = parseFloat(cssRule.style.fontSize.slice(0, -2));
             cssRule.style.fontSize = `${lastSize - incrementionRate}em`;
@@ -369,42 +533,35 @@ function adjustFontSize(cssRule, el) {
 dragElement(container);
 
 function dragElement(elmnt) {
-  var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-  if (document.getElementById("display")) {
-    // if present, the header is where you move the DIV from:
-    document.getElementById("display").onmousedown = dragMouseDown;
-  } else {
-    // otherwise, move the DIV from anywhere inside the DIV:
-    elmnt.onmousedown = dragMouseDown;
-  }
+    var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+    if (document.getElementById("display")) {
+        document.getElementById("display").onmousedown = dragMouseDown;
+    } else {
+        elmnt.onmousedown = dragMouseDown;
+    }
 
-  function dragMouseDown(e) {
-    e = e || window.event;
-    e.preventDefault();
-    // get the mouse cursor position at startup:
-    pos3 = e.clientX;
-    pos4 = e.clientY;
-    document.onmouseup = closeDragElement;
-    // call a function whenever the cursor moves:
-    document.onmousemove = elementDrag;
-  }
+    function dragMouseDown(e) {
+        e = e || window.event;
+        e.preventDefault();
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        document.onmouseup = closeDragElement;
+        document.onmousemove = elementDrag;
+    }
 
-  function elementDrag(e) {
-    e = e || window.event;
-    e.preventDefault();
-    // calculate the new cursor position:
-    pos1 = pos3 - e.clientX;
-    pos2 = pos4 - e.clientY;
-    pos3 = e.clientX;
-    pos4 = e.clientY;
-    // set the element's new position:
-    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
-    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
-  }
+    function elementDrag(e) {
+        e = e || window.event;
+        e.preventDefault();
+        pos1 = pos3 - e.clientX;
+        pos2 = pos4 - e.clientY;
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+        elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+    }
 
-  function closeDragElement() {
-    // stop moving when mouse button is released:
-    document.onmouseup = null;
-    document.onmousemove = null;
+    function closeDragElement() {
+        document.onmouseup = null;
+        document.onmousemove = null;
   }
 }

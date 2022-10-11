@@ -107,6 +107,7 @@ header {
 
 #controls-0 {
     grid-area: button-17;
+    background-color: rgb(123, 123, 123);
 }
 
 #controls-comma {
@@ -156,6 +157,7 @@ header {
 }
 
 button {
+    outline: inherit;
     border: solid rgb(80, 80, 80);
     border-width: 0.001em;
     font-family: -apple-system, BlinkMacSystemFont, sans-serif;
