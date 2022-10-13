@@ -22,8 +22,9 @@ paraDisplayOutput.textContent = currentInputNum;
 window.addEventListener('keydown', function(event) {
     const key = event.key;
     if (key === "Backspace") {
-        if(currentInputNum === 0) { } else {
+        if(currentInputNum != 0) {
             paraDisplayOutput.textContent = paraDisplayOutput.textContent.slice(0, -1);
+            
             if(paraDisplayOutput.textContent == "") { 
                 paraDisplayOutput.textContent = 0;
                 currentInputNum = 0;
@@ -40,6 +41,7 @@ function adittionMinusClicked() {
         currentInputNum = -currentInputNum;
         paraDisplayOutput.textContent = currentInputNum;
     };
+
     adjustFontSize(displayParaRule, paraDisplayOutput);
 };
 
@@ -48,13 +50,18 @@ buttonAdittionMinus.addEventListener("click", function() {
 });
 
 function percentageButtonClicked() {
+    makeAllGlobalNumsInt();
+
     if(lastSelectedEquals) {
         currentSum = currentSum / 100;
+        makeAllGlobalNumsInt();
         paraDisplayOutput.textContent = currentSum;
     } else {
         currentInputNum = currentInputNum / 100;
+        makeAllGlobalNumsInt();
         paraDisplayOutput.textContent = currentInputNum;
     };
+
     adjustFontSize(displayParaRule, paraDisplayOutput);
 };
 
@@ -68,11 +75,12 @@ function clearButtonClicked() {
     lastSelectedEquals = false;
     lastSelectedOperator = false;
     currentOperator = "";
+    currentButtonNum = "";
     newInputNum = "";
     currentInputNum = 0;
     currentSum = 0;
     paraDisplayOutput.textContent = currentInputNum;
-}
+};
 
 buttonClear.addEventListener("click", function() {
     clearButtonClicked();
@@ -151,6 +159,7 @@ Array.from(allButtons).forEach(button => {
         if(buttonsToKeysMap.find(findKey)) {
             if(buttonsToKeysMap.find(findKey).id == button.id) {
                 switchButtonColorDown(button);
+
                 if(button.className === "number-buttons") {
                     numberButtonClicked(button);
                 } else {
@@ -180,7 +189,7 @@ Array.from(allButtons).forEach(button => {
                             zeroButtonClicked();
                             break;
                     };
-                }
+                };
             };
         };
         function findKey(key) {
@@ -226,6 +235,7 @@ function commaButtonClicked() {
     if(!paraDisplayOutput.textContent.includes(".")) {
         paraDisplayOutput.textContent = currentInputNum + innerButtonComma;
     };
+
     adjustFontSize(displayParaRule, paraDisplayOutput);
 };
 
@@ -234,23 +244,28 @@ buttonComma.addEventListener("click", function() {
 });
 
 function numberButtonClicked(buttonNumber) {
-    currentButtonNum = buttonNumber.innerHTML;
+    numberButtonClicked_number(buttonNumber.innerHTML);
+};
+
+function numberButtonClicked_number(buttonNumber) {
+    currentButtonNum = buttonNumber;
     operatorUsed(currentOperator, currentButtonNum);
-    if(buttonNumber.innerHTML == 0) {} else {
-        if(currentInputNum == 0) { currentInputNum = ""; };
-        if(paraDisplayOutput.textContent.includes(".") && currentOperator == "") { 
-            if(currentInputNum == 0) { currentInputNum = ""; };
-            showCurrentInputWithComma(currentButtonNum); 
-        } else {
-            if(currentOperator == "") {
-                if(currentInputNum == 0) { currentInputNum = ""; };
-                showCurrentInputNum(currentButtonNum);
-            }
-        }
-    }
+
+    if(paraDisplayOutput.textContent.includes(".") && currentOperator == "") { 
+        showCurrentInputWithComma(currentButtonNum); 
+    } else {
+        if(currentOperator == "") {
+            if(currentInputNum == 0) { 
+                currentInputNum = ""; 
+            };
+            showCurrentInputNum(currentButtonNum);
+        };
+    };
+
     if(paraDisplayOutput.textContent.length >= 30) {
         paraDisplayOutput.textContent = paraDisplayOutput.textContent.slice(0,30);
     };
+
     adjustFontSize(displayParaRule, paraDisplayOutput);
 };
 
@@ -265,30 +280,38 @@ let lastSelectedOperator;
 function operatorUsed(currentOperator, currentButtonNum) {
     if(currentOperator != "") {
         if(paraDisplayOutput.textContent.includes(".")) {
-            if(currentInputNum == 0) { currentInputNum = ""; };
+            if(currentInputNum == 0) { 
+                currentInputNum = ""; 
+            };
+
             if(lastSelectedOperator) { 
                 paraDisplayOutput.textContent = "";
                 lastSelectedOperator = false;
             };
+
             if(lastSelectedEquals) {       
                 paraDisplayOutput.textContent = "";
                 currentInputNum = "";          
                 lastSelectedEquals = false; 
             };
+
             showCurrentInputWithComma(currentButtonNum);
         } else {
             if(lastSelectedOperator) { 
                 paraDisplayOutput.textContent = "";
                 lastSelectedOperator = false;
             };
+
             if(lastSelectedEquals) {       
                 paraDisplayOutput.textContent = "";
                 currentInputNum = "";          
                 lastSelectedEquals = false; 
             };
+
             if(currentInputNum == 0) { currentInputNum = ""; };
             showCurrentInputNum(currentButtonNum);
-        }
+        };
+
         adjustFontSize(displayParaRule, paraDisplayOutput);
     };
 };
@@ -307,18 +330,7 @@ function showCurrentInputWithComma(currentButtonNum) {
 };
 
 function zeroButtonClicked() {
-    currentButtonNum = "0";
-    if((lastSelectedOperator && currentSum != 0 && !currentInputNum.toString().slice(0,2) === "0.") || (lastSelectedOperator && currentSum !=0 && currentInputNum == "0")) { paraDisplayOutput.textContent = "0"; };
-    if(paraDisplayOutput.textContent.slice(0,2) === "0.") { paraDisplayOutput.textContent += currentButtonNum; };
-    if(currentInputNum === 0 && currentSum === 0) { } else {
-        if(paraDisplayOutput.textContent.includes(".")) {
-            showCurrentInputWithComma(currentButtonNum);
-        } else {
-            currentInputNum = 0;
-            paraDisplayOutput.textContent = currentInputNum;
-        };
-    }
-    adjustFontSize(displayParaRule, paraDisplayOutput);
+    numberButtonClicked_number(0);
 };
 
 buttonZero.addEventListener("click", function() {
@@ -341,9 +353,17 @@ function clearBorderOperatorButtons() {
 function adittionButtonClicked() {
     lastSelectedEquals = false;
     lastSelectedOperator = true;
+
     makeAllGlobalNumsInt();
-    if(currentOperator != "" && currentInputNum != 0) { sumAll() };
-    if(currentSum == 0) { currentSum = currentInputNum; };
+
+    if(currentOperator != "" && currentInputNum != 0) {
+         sumAll() 
+    };
+
+    if(currentSum == 0) { 
+        currentSum = currentInputNum; 
+    };
+
     currentInputNum = 0;
     adjustFontSize(displayParaRule, paraDisplayOutput);
     clearBorderOperatorButtons();
@@ -359,8 +379,15 @@ function divideButtonClicked() {
     lastSelectedEquals = false;
     lastSelectedOperator = true;
     makeAllGlobalNumsInt();
-    if(currentOperator != "" && currentInputNum != 0) { sumAll() };
-    if(currentSum == 0) { currentSum = currentInputNum; };
+
+    if(currentOperator != "" && currentInputNum != 0) { 
+        sumAll() 
+    };
+
+    if(currentSum == 0) { 
+        currentSum = currentInputNum; 
+    };
+
     currentInputNum = 0;
     adjustFontSize(displayParaRule, paraDisplayOutput);
     clearBorderOperatorButtons();
@@ -375,12 +402,22 @@ buttonDivide.addEventListener("click", function() {
 function multiplyButtonClicked() {
     lastSelectedEquals = false;
     lastSelectedOperator = true;
+
     makeAllGlobalNumsInt();
-    if(currentOperator != "" && currentInputNum != 0) { sumAll() };
-    if(currentSum == 0) { currentSum = currentInputNum; };
+
+    if(currentOperator != "" && currentInputNum != 0) {
+         sumAll() 
+    };
+        
+    if(currentSum == 0) {
+        currentSum = currentInputNum; 
+    };
+
     currentInputNum = 0;
+
     adjustFontSize(displayParaRule, paraDisplayOutput);
     clearBorderOperatorButtons();
+
     multiplyParaRule.style.borderWidth = "0.1em";
     currentOperator = "*";
 };
@@ -392,15 +429,25 @@ buttonMultiply.addEventListener("click", function() {
 function subtractButtonClicked() {
     lastSelectedEquals = false;
     lastSelectedOperator = true;
+
     makeAllGlobalNumsInt();
-    if(currentOperator != "" && currentInputNum != 0) { sumAll() };
-    if(currentSum == 0) { currentSum = currentInputNum; };
+    if(currentOperator != "" && currentInputNum != 0) {
+         sumAll() 
+    };
+
+    if(currentSum == 0) { 
+        currentSum = currentInputNum; 
+    };
+
     currentInputNum = 0;
+
     adjustFontSize(displayParaRule, paraDisplayOutput);
     clearBorderOperatorButtons();
+
     subtractParaRule.style.borderWidth = "0.1em";
     currentOperator = "-";
 };
+
 
 buttonSubtract.addEventListener("click", function() {
     subtractButtonClicked();
@@ -452,13 +499,18 @@ function switchOpertator(operator) {
 function equalsButtonClicked() {
     lastSelectedEquals = true;
     lastSelectedOperator = false;
+    
     clearBorderOperatorButtons();
     if(currentOperator != "") {
         switchOpertator(currentOperator);
     } else {
         switchOpertator(equalsOperator);
     };
-    if(currentOperator != "") { equalsOperator = currentOperator; };
+
+    if(currentOperator != "") { 
+        equalsOperator = currentOperator; 
+    };
+
     currentOperator = "";
     adjustFontSize(displayParaRule, paraDisplayOutput);
 };
@@ -469,24 +521,28 @@ buttonEquals.addEventListener("click", function() {
 
 const add = function() {
     makeAllGlobalNumsInt();
+
     currentSum = currentInputNum + currentSum;
     return paraDisplayOutput.textContent = currentSum;
 };
 
 const multiply = function() {
     makeAllGlobalNumsInt();
+
     currentSum = currentInputNum * currentSum;
     return paraDisplayOutput.textContent = currentSum;
 }
 
 const divide = function() {
     makeAllGlobalNumsInt();
+
     currentSum = currentSum / currentInputNum;
     return paraDisplayOutput.textContent = currentSum;
 };
 
 const subtract = function() {
     makeAllGlobalNumsInt();
+
     currentSum = currentSum - currentInputNum;
     return paraDisplayOutput.textContent = currentSum;
 };
