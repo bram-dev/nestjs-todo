@@ -1,0 +1,54 @@
+type Query {
+  todos: [ToDo]
+  todo(id: ID!): ToDo
+}
+
+type Mutation {
+  createToDo(createToDoInput: CreateToDoInput): ToDo
+  updateToDo(updateToDoInput: UpdateToDoInput!): ToDo!
+  removeToDo(id: ID!): ToDo
+}
+
+type Subscription {
+  todoCreated: ToDo
+}
+
+type ToDo {
+  id: String
+  label: String
+  saved: Boolean
+  checked: Boolean
+  date: String
+  priority: String
+  user_id: String
+  project: Project
+}
+
+type Project {
+  id: String
+  label: String
+  saved: Boolean
+  user_id: String
+  todos: [ToDo]
+}
+
+input CreateToDoInput {
+  label: String
+  date: String
+  priority: String
+  saved: Boolean
+  checked: Boolean
+  user_id: String
+  project: ID
+}
+
+input UpdateToDoInput {
+  id: String
+  label: String
+  date: String
+  priority: String
+  saved: Boolean
+  checked: Boolean
+  user_id: String
+  project: ID
+}
